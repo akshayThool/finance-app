@@ -56,15 +56,15 @@ export const Navigation = () => {
         </SheetTrigger>
         <SheetContent side="left" className="px-2">
           <nav className="flex flex-col gap-y-2 pt-6">
-            {routes.map((route) => 
-            <Button
+            {routes.map((route) =>
+              <Button
                 variant={route.href === pathName ? "secondary" : "ghost"}
                 key={route.href}
                 onClick={() => onClick(route.href)}
                 className="w-full justify-start"
-            >
+              >
                 {route.label}
-            </Button>)}
+              </Button>)}
           </nav>
         </SheetContent>
       </Sheet>

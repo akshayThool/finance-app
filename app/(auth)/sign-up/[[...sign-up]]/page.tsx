@@ -1,5 +1,5 @@
-import { Loader2} from "lucide-react";
-import { SignUp, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
+import {Loader2} from "lucide-react";
+import {ClerkLoaded, ClerkLoading, SignUp} from "@clerk/nextjs";
 import Image from "next/image";
 
 export default function Page() {
@@ -16,7 +16,7 @@ export default function Page() {
         </div>
         <div className="flex items-center justify-center mt-8">
           <ClerkLoaded>
-            <SignUp />
+            <SignUp/>
           </ClerkLoaded>
           <ClerkLoading>
             <Loader2 className="animate-spin text-muted-foreground"/>
@@ -24,7 +24,7 @@ export default function Page() {
         </div>
       </div>
       <div className="h-full bg-blue-600 hidden lg:flex items-center justify-center">
-        <Image src="/logo.svg" alt="logo" height={100} width={100} />
+        <Image src="/logo.svg" alt="logo" height={100} width={100}/>
       </div>
     </div>
   )
