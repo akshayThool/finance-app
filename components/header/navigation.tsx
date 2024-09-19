@@ -1,6 +1,6 @@
 "use client";
 
-import {NavButton} from "@/components/nav-button";
+import {NavButton} from "@/components/header/nav-button";
 import {usePathname, useRouter} from "next/navigation";
 import {useState} from "react";
 import {useMedia} from "react-use";
