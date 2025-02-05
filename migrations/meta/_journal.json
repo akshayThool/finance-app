@@ -15,6 +15,13 @@
       "when": 1727327047346,
       "tag": "0001_dashing_senator_kelly",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1737295314703,
+      "tag": "0002_late_bucky",
+      "breakpoints": true
     }
   ]
 }
