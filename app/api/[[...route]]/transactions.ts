@@ -13,12 +13,12 @@ const app = new Hono()
     zValidator("query", z.object({
       from: z.string().optional(),
       to: z.string().optional(),
-      accoundId: z.string().optional()
+      accountId: z.string().optional()
     })),
     clerkMiddleware(),
     async (c) => {
     const auth = getAuth(c);
-    const { from, to, accoundId } = c.req.valid("query");
+    const { from, to, accountId } = c.req.valid("query");
 
     if(!auth?.userId){
       return c.json({ error: "Unauthorized"}, 401);
@@ -48,7 +48,7 @@ const app = new Hono()
         .leftJoin(categories, eq(transactions.categoryId, categories.id))
         .where(
           and(
-            accoundId ? eq(transactions.accountId, accoundId) : undefined,
+            accountId ? eq(transactions.accountId, accountId) : undefined,
             eq(accounts.userId, auth.userId),
             gte(transactions.date, startDate),
             lte(transactions.date, endDate)
@@ -119,6 +119,30 @@ const app = new Hono()
 
       return c.json(data, 200);
     })
+  .post("/bulk-create", 
+    clerkMiddleware(),
+    zValidator("json", z.array(insertTransactionSchema.omit({
+      id: true
+    }))),
+    async (c) => {
+      const auth = getAuth(c);
+      const values = c.req.valid("json");
+
+      if(!auth?.userId){
+        return c.json({ error: "Unauthorized"}, 401);
+      }
+
+      const data = await db.insert(transactions)
+      .values(
+        values.map((value) => ({
+          id: createId(),
+          ...value
+        }))
+      ).returning();
+
+      return c.json({data});
+    }
+  )
   .post("/delete",
       clerkMiddleware(),
       zValidator("json", z.object({
