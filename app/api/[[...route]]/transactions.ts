@@ -88,6 +88,7 @@ const app = new Hono()
           })
           .from(transactions)
           .innerJoin(accounts, eq(transactions.accountId, accounts.id))
+          .leftJoin(categories, eq(transactions.categoryId, categories.id))
           .where(
             and(
               eq(transactions.id, id),

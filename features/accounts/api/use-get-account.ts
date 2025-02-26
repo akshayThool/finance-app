@@ -3,7 +3,6 @@ import {client} from "@/lib/hono";
 
 
 export const useGetAccount = (id?: string) => {
-  console.log("useGetAcount id", id);
   const query = useQuery({
     enabled: !!id,
     queryKey : ["accounts", { id }],
