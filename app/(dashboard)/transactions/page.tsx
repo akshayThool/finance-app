@@ -16,6 +16,11 @@ import { UploadButton } from "./upload-button";
 import { useState } from "react";
 import { ImportCard } from "./import-card";
 
+import { transactions as transactionsSchema } from "@/db/schema";
+import { useSelectAccount } from "@/features/accounts/hooks/use-select-account";
+import { toast } from "sonner";
+import { useBulkCreateTransactions } from "@/features/transactions/api/use-bulk-create-transactions";
+
 enum VARIANTS {
   LIST = "LIST",
   IMPORT = "IMPORT",
@@ -28,6 +33,7 @@ const INITIAL_IMPORT_RESULTS = {
 };
 
 const TransactionPage = () => {
+  const [AccountDialog, confirm] = useSelectAccount();
   const [variant, setVariant] = useState<VARIANTS>(VARIANTS.LIST);
   const [importResults, setImportResults] = useState(INITIAL_IMPORT_RESULTS);
 
@@ -44,11 +50,35 @@ const TransactionPage = () => {
   const newTransaction = useNewTransaction();
   const getAllTransactions = useGetTransactions();
   const deleteTransactions = useDeleteTransactions();
+  const bulkCreateTransactions = useBulkCreateTransactions();
 
   const transactions = getAllTransactions.data || [];
 
   const isDisabled =
     getAllTransactions.isLoading || deleteTransactions.isPending;
+
+  const onSubmitImport = async (
+    values: (typeof transactionsSchema.$inferInsert)[]
+  ) => {
+    const accountId = await confirm();
+
+    if (!accountId) {
+      return toast.error("Please select an account to continue");
+    }
+
+    const data = values.map((value) => ({
+      ...value,
+      accountId: accountId as string,
+    }));
+
+    bulkCreateTransactions.mutate(data, {
+      onSuccess: () => {
+        onCancelImport();
+      },
+    });
+
+    console.log(data);
+  };
 
   if (getAllTransactions.isLoading) {
     return (
@@ -70,7 +100,12 @@ const TransactionPage = () => {
   if (variant === VARIANTS.IMPORT) {
     return (
       <>
-        <ImportCard data={importResults.data} onCancel={onCancelImport} />
+        <AccountDialog />
+        <ImportCard
+          data={importResults.data}
+          onCancel={onCancelImport}
+          onSubmit={onSubmitImport}
+        />
       </>
     );
   }

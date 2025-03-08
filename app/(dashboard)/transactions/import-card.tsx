@@ -8,6 +8,7 @@ import { format, parse } from "date-fns";
 type Props = {
   data: string[][];
   onCancel: () => void;
+  onSubmit: (data: any) => void;
 };
 
 interface SelectedColumnState {
@@ -19,7 +20,7 @@ const requiredOptions = ["date", "payee", "amount"];
 const dateFormat = "yyyy-MM-dd HH:mm:ss";
 const outputFormat = "yyyy-MM-dd";
 
-export const ImportCard = ({ data, onCancel }: Props) => {
+export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
   const header = data[0];
   const body = data.slice(1);
 
@@ -92,7 +93,7 @@ export const ImportCard = ({ data, onCancel }: Props) => {
       date: format(parse(item.date, dateFormat, new Date()), outputFormat),
     }));
 
-    console.log({ formattedData });
+    onSubmit(formattedData);
   };
 
   return (
