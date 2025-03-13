@@ -1,56 +1,56 @@
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
 type Props = {
-  columnIndex: number;
-  selectedColumns: Record<string, string | null>;
-  onChange: (columnIndex: number, value: string | null) => void;
+    columnIndex: number;
+    selectedColumns: Record<string, string | null>;
+    onChange: (columnIndex: number, value: string | null) => void;
 };
 
-const options = ["date", "payee", "amount"];
+const options = ["date", "payee", "amount", "notes"];
 export const TableHeadSelect = ({
-  columnIndex,
-  selectedColumns,
-  onChange,
+    columnIndex,
+    selectedColumns,
+    onChange,
 }: Props) => {
-  const currentSelection = selectedColumns[`column_${columnIndex}`];
-  return (
-    <Select
-      value={currentSelection || ""}
-      onValueChange={(value) => onChange(columnIndex, value)}
-    >
-      <SelectTrigger
-        className={cn(
-          "focus:ring-offset-0 focus:ring-transparent outline-none border-none bg-transparent capitalize",
-          currentSelection && "text-blue-500"
-        )}
-      >
-        <SelectValue placeholder="Skip" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="skip">Skip</SelectItem>
-        {options.map((option, index) => {
-          const disabled =
-            Object.values(selectedColumns).includes(option) &&
-            selectedColumns[`column_${columnIndex}`] !== option;
-          return (
-            <SelectItem
-              key={index}
-              value={option}
-              disabled={disabled}
-              className="capitalize"
+    const currentSelection = selectedColumns[`column_${columnIndex}`];
+    return (
+        <Select
+            value={currentSelection || ""}
+            onValueChange={(value) => onChange(columnIndex, value)}
+        >
+            <SelectTrigger
+                className={cn(
+                    "focus:ring-offset-0 focus:ring-transparent outline-none border-none bg-transparent capitalize",
+                    currentSelection && "text-blue-500"
+                )}
             >
-              {option}
-            </SelectItem>
-          );
-        })}
-      </SelectContent>
-    </Select>
-  );
+                <SelectValue placeholder="Skip" />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem value="skip">Skip</SelectItem>
+                {options.map((option, index) => {
+                    const disabled =
+                        Object.values(selectedColumns).includes(option) &&
+                        selectedColumns[`column_${columnIndex}`] !== option;
+                    return (
+                        <SelectItem
+                            key={index}
+                            value={option}
+                            disabled={disabled}
+                            className="capitalize"
+                        >
+                            {option}
+                        </SelectItem>
+                    );
+                })}
+            </SelectContent>
+        </Select>
+    );
 };

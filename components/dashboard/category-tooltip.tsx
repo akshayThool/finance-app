@@ -4,8 +4,6 @@ import { formatCurrency } from "@/lib/utils";
 export const CategoryToolTip = ({ active, payload }: any) => {
     if (!active) return null;
 
-    console.log("ToolTip Payload : ", payload);
-
     const name = payload[0].payload.name;
     const value = payload[0].value;
 
